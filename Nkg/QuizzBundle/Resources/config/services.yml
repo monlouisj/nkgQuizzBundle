@@ -1,0 +1,15 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+#parameters:
+#    parameter_name: value
+
+services:
+    nkg.quizz:
+        class: Nkg\QuizzBundle\Services\QuizzService
+        arguments:
+            - @doctrine.orm.entity_manager
+    nkg.answer:
+        class: Nkg\QuizzBundle\Services\AnswerService
+        arguments:
+            - @doctrine.orm.entity_manager
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
