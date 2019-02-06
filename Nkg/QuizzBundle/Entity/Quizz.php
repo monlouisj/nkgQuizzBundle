@@ -14,35 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Quizz
 {
-     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="quizz", cascade={"persist","remove"})
-     */
-    protected $answers;
-
-    public function __construct()
-    {
-        $this->answers = new ArrayCollection();
-    }
-
-    /** @ORM\PrePersist
-    * @ORM\PreUpdate()
-    */
-     function onPrePersist()
-     {
-         if($this->getCreatedat() === null){
-           $this->setCreatedat( new \Datetime("now") );
-         }
-
-         $this->setModifiedat( new \Datetime("now") );
-     }
-
-     /**
-     * @return string
-     */
-      public function __toString()
-      {
-          return $this->getLibelle() ?: 'n/a';
-      }
 
     /**
      * @var integer
@@ -53,33 +24,10 @@ class Quizz
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="libelle", type="string", length=255)
+     /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="quizz", cascade={"persist","remove"})
      */
-    private $libelle;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", nullable=true, type="text")
-     */
-    private $description;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="propriete1", nullable=true, type="string")
-     */
-    private $propriete1;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="propriete2", nullable=true, type="string")
-     */
-    private $propriete2;
+    protected $questions;
 
     /**
      * @var \DateTime
@@ -102,14 +50,7 @@ class Quizz
      */
     private $active;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="hide", type="boolean")
-     */
-    private $hide;
-
-    /**
+        /**
      * @var \DateTime
      *
      * @ORM\Column(name="startdate", type="datetime")
@@ -124,65 +65,24 @@ class Quizz
     private $enddate;
 
 
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function __construct()
     {
-        return $this->id;
+        $this->questions = new ArrayCollection();
     }
 
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Quizz
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
+    /** @ORM\PrePersist
+    * @ORM\PreUpdate()
+    */
+     function onPrePersist()
+     {
+         if($this->getCreatedat() === null){
+           $this->setCreatedat( new \Datetime("now") );
+         }
 
-        return $this;
-    }
+         $this->setModifiedat( new \Datetime("now") );
+     }
 
-    /**
-     * Get libelle
-     *
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Quizz
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
+     /**
      * Set createdat
      *
      * @param \DateTime $createdat
@@ -298,105 +198,54 @@ class Quizz
     }
 
     /**
-     * Add answers
+     * Get id
      *
-     * @param \Nkg\QuizzBundle\Entity\Answer $answers
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Add questions
+     *
+     * @param \Nkg\QuizzBundle\Entity\Question $questions
      * @return Quizz
      */
-    public function addAnswer(\Nkg\QuizzBundle\Entity\Answer $answer)
+    public function addQuestion(\Nkg\QuizzBundle\Entity\Question $questions)
     {
-        $answer->setQuizz($this);
-        $this->answers->add($answer);
+        $this->questions[] = $questions;
 
         return $this;
     }
 
     /**
-     * Remove answers
+     * Remove questions
      *
-     * @param \Nkg\QuizzBundle\Entity\Answer $answers
+     * @param \Nkg\QuizzBundle\Entity\Question $questions
      */
-    public function removeAnswer(\Nkg\QuizzBundle\Entity\Answer $answers)
+    public function removeQuestion(\Nkg\QuizzBundle\Entity\Question $questions)
     {
-        $this->answers->removeElement($answers);
+        $this->questions->removeElement($questions);
     }
 
     /**
-     * Get answers
+     * Get questions
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAnswers()
+    public function getQuestions()
     {
-        return $this->answers;
+        return $this->questions;
     }
 
     /**
-     * Set propriete1
-     *
-     * @param string $propriete1
-     * @return Quizz
-     */
-    public function setPropriete1($propriete1)
+ * @return string
+ */
+    public function __toString()
     {
-        $this->propriete1 = $propriete1;
-
-        return $this;
+        return "".$this->getId() ?: 'n/a';
     }
 
-    /**
-     * Get propriete1
-     *
-     * @return string
-     */
-    public function getPropriete1()
-    {
-        return $this->propriete1;
-    }
-
-    /**
-     * Set propriete2
-     *
-     * @param string $propriete2
-     * @return Quizz
-     */
-    public function setPropriete2($propriete2)
-    {
-        $this->propriete2 = $propriete2;
-
-        return $this;
-    }
-
-    /**
-     * Get propriete2
-     *
-     * @return string
-     */
-    public function getPropriete2()
-    {
-        return $this->propriete2;
-    }
-
-    /**
-     * Set hide
-     *
-     * @param boolean $hide
-     * @return Quizz
-     */
-    public function setHide($hide)
-    {
-        $this->hide = $hide;
-
-        return $this;
-    }
-
-    /**
-     * Get hide
-     *
-     * @return boolean
-     */
-    public function getHide()
-    {
-        return $this->hide;
-    }
 }

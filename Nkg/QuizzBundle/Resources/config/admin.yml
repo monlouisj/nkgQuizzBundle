@@ -1,15 +1,4 @@
 services:
-#reponses
-    sonata.admin.answers:
-        class: Nkg\QuizzBundle\Admin\AnswerAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Quizz", label: "Reponses" }
-        arguments:
-            - ~
-            - Nkg\QuizzBundle\Entity\Answer
-            - ~
-        calls:
-            - [ setTranslationDomain, [NkgQuizzBundle]]
 #quizz
     sonata.admin.quizz:
         class: Nkg\QuizzBundle\Admin\QuizzAdmin
@@ -18,6 +7,28 @@ services:
         arguments:
             - ~
             - Nkg\QuizzBundle\Entity\Quizz
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgQuizzBundle]]
+#question
+    sonata.admin.question:
+        class: Nkg\QuizzBundle\Admin\QuestionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Quizz", label: "Questions" }
+        arguments:
+            - ~
+            - Nkg\QuizzBundle\Entity\Question
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgQuizzBundle]]
+#reponses
+    sonata.admin.answers:
+        class: Nkg\QuizzBundle\Admin\AnswerAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Quizz", label: "Reponses" }
+        arguments:
+            - ~
+            - Nkg\QuizzBundle\Entity\Answer
             - ~
         calls:
             - [ setTranslationDomain, [NkgQuizzBundle]]

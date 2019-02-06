@@ -5,6 +5,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Nkg\QuizzBundle\Entity\Question;
 use Nkg\QuizzBundle\Entity\Quizz;
 
 class QuizzAdmin extends Admin
@@ -13,19 +14,14 @@ class QuizzAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Le quizz', array('class' => 'col-md-6'))
-              ->add('libelle', 'text', array('label' => 'Nom du quizz'))
-              ->add('description', 'text', array('label' => 'Description du quizz', 'required'=>false))
-              ->add('propriete1', 'text', array('label' => 'Info additionnelle 1', 'required'=>false))
-              ->add('propriete2', 'text', array('label' => 'Info additionnelle 2', 'required'=>false))
+            ->with('Le quizz', array('class' => 'col-md-4'))
               ->add('startdate', 'datetime', array('label' => 'Date de début'))
               ->add('enddate', 'datetime', array('label' => 'Date de fin'))
-              ->add('hide', 'checkbox', array('label' => 'Masquer bouton jouer','required'=>false))
               ->add('active', 'checkbox', array('label' => 'Actif?','required'=>false))
             ->end()
-            ->with('Les reponses', array('class' => 'col-md-6'))
-              ->add('answers', 'sonata_type_collection', array(
-                    'label'       => "Veuillez saisir les réponses proposées: ",
+            ->with('Les questions', array('class' => 'col-md-8'))
+              ->add('questions', 'sonata_type_collection', array(
+                    'label'       => "Veuillez saisir les questions proposées: ",
                     'by_reference'       => false,
                     'cascade_validation' => true,
                 ), array(
@@ -40,7 +36,7 @@ class QuizzAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('libelle')
+            ->add('id')
         ;
     }
 
@@ -48,7 +44,7 @@ class QuizzAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('libelle')
+            ->addIdentifier('id')
             ->add('startdate')
             ->add('enddate')
         ;
@@ -59,21 +55,21 @@ class QuizzAdmin extends Admin
      */
     public function getNewInstance()
     {
-        $quizz = parent::getNewInstance();
-        $debut = $quizz->getStartdate();
+        $question = parent::getNewInstance();
+        $debut = $question->getStartdate();
 
         if($debut === null){
           $debut = new \Datetime("now");
-          $quizz->setStartdate($debut);
+          $question->setStartdate($debut);
         }
 
 
-        if($quizz->getEnddate() === null){
+        if($question->getEnddate() === null){
           $fin = clone $debut;
           $fin = $fin->add( new \DateInterval("P10D"));
-          $quizz->setEnddate($fin);
+          $question->setEnddate($fin);
         }
 
-        return $quizz;
+        return $question;
     }
 }

@@ -15,10 +15,10 @@ class AnswerAdmin extends Admin
         $formMapper
             ->add('libelle', 'text', array('label' => 'Libelle reponse'))
             ->add('description', 'text', array('label' => 'Description reponse'))
-            ->add('propriete1', 'text', array('label' => 'Propriete 1','required'=>false))
-            ->add('propriete2', 'text', array('label' => 'Propriete 2','required'=>false))
-            ->add('quizz', null, array())
-            ->add('correct', 'checkbox', array('label' => 'Correcte','required'=>false))
+            ->add('propriete1', 'text', array('label' => 'Info additionnelle 1', 'required'=>false))
+            ->add('propriete2', 'text', array('label' => 'Info additionnelle 2', 'required'=>false))
+            ->add('question', null, array())
+            ->add('correct', 'checkbox', array('label' => 'Correcte', 'required'=>false))
         ;
     }
 
@@ -36,6 +36,7 @@ class AnswerAdmin extends Admin
         $listMapper
             ->addIdentifier('libelle')
             ->add('description')
+            ->add('id')
         ;
     }
 }

@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Answer
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Quizz", inversedBy="answers")
+     * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers")
      * @ORM\JoinColumn(referencedColumnName="id")
      */
-    protected $quizz;
+    protected $question;
 
 
     /**
@@ -176,26 +176,26 @@ class Answer
     }
 
     /**
-     * Set quizz
+     * Set question
      *
-     * @param \Nkg\QuizzBundle\Entity\Quizz $quizz
+     * @param \Nkg\QuizzBundle\Entity\Question $question
      * @return Answer
      */
-    public function setQuizz(\Nkg\QuizzBundle\Entity\Quizz $quizz)
+    public function setQuestion(\Nkg\QuizzBundle\Entity\Question $question)
     {
-        $this->quizz = $quizz;
+        $this->question = $question;
 
         return $this;
     }
 
     /**
-     * Get quizz
+     * Get question
      *
-     * @return \Nkg\QuizzBundle\Entity\Quizz
+     * @return \Nkg\QuizzBundle\Entity\Question
      */
-    public function getQuizz()
+    public function getQuestion()
     {
-        return $this->quizz;
+        return $this->question;
     }
 
     /**

@@ -6,16 +6,22 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Quizz
+ * Question
  * @ORM\Entity
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Nkg\QuizzBundle\Entity\QuizzRepository")
+ * @ORM\Entity(repositoryClass="Nkg\QuizzBundle\Entity\QuestionRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Quizz
+class Question
 {
+    /**
+     * @ORM\ManyToOne(targetEntity="Quizz", inversedBy="questions")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    protected $quizz;
+
      /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="quizz", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"persist","remove"})
      */
     protected $answers;
 
@@ -24,17 +30,7 @@ class Quizz
         $this->answers = new ArrayCollection();
     }
 
-    /** @ORM\PrePersist
-    * @ORM\PreUpdate()
-    */
-     function onPrePersist()
-     {
-         if($this->getCreatedat() === null){
-           $this->setCreatedat( new \Datetime("now") );
-         }
-
-         $this->setModifiedat( new \Datetime("now") );
-     }
+    
 
      /**
      * @return string
@@ -80,20 +76,7 @@ class Quizz
      * @ORM\Column(name="propriete2", nullable=true, type="string")
      */
     private $propriete2;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="createdat", type="datetime")
-     */
-    private $createdat;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="modifiedat", type="datetime")
-     */
-    private $modifiedat;
+    
 
     /**
      * @var boolean
@@ -110,23 +93,6 @@ class Quizz
     private $hide;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="startdate", type="datetime")
-     */
-    private $startdate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="enddate", type="datetime")
-     */
-    private $enddate;
-
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -140,7 +106,7 @@ class Quizz
      * Set libelle
      *
      * @param string $libelle
-     * @return Quizz
+     * @return Question
      */
     public function setLibelle($libelle)
     {
@@ -163,7 +129,7 @@ class Quizz
      * Set description
      *
      * @param string $description
-     * @return Quizz
+     * @return Question
      */
     public function setDescription($description)
     {
@@ -182,57 +148,13 @@ class Quizz
         return $this->description;
     }
 
-    /**
-     * Set createdat
-     *
-     * @param \DateTime $createdat
-     * @return Quizz
-     */
-    public function setCreatedat($createdat)
-    {
-        $this->createdat = $createdat;
-
-        return $this;
-    }
-
-    /**
-     * Get createdat
-     *
-     * @return \DateTime
-     */
-    public function getCreatedat()
-    {
-        return $this->createdat;
-    }
-
-    /**
-     * Set modifiedat
-     *
-     * @param \DateTime $modifiedat
-     * @return Quizz
-     */
-    public function setModifiedat($modifiedat)
-    {
-        $this->modifiedat = $modifiedat;
-
-        return $this;
-    }
-
-    /**
-     * Get modifiedat
-     *
-     * @return \DateTime
-     */
-    public function getModifiedat()
-    {
-        return $this->modifiedat;
-    }
+    
 
     /**
      * Set active
      *
      * @param boolean $active
-     * @return Quizz
+     * @return Question
      */
     public function setActive($active)
     {
@@ -251,61 +173,17 @@ class Quizz
         return $this->active;
     }
 
-    /**
-     * Set startdate
-     *
-     * @param \DateTime $startdate
-     * @return Quizz
-     */
-    public function setStartdate($startdate)
-    {
-        $this->startdate = $startdate;
-
-        return $this;
-    }
-
-    /**
-     * Get startdate
-     *
-     * @return \DateTime
-     */
-    public function getStartdate()
-    {
-        return $this->startdate;
-    }
-
-    /**
-     * Set enddate
-     *
-     * @param \DateTime $enddate
-     * @return Quizz
-     */
-    public function setEnddate($enddate)
-    {
-        $this->enddate = $enddate;
-
-        return $this;
-    }
-
-    /**
-     * Get enddate
-     *
-     * @return \DateTime
-     */
-    public function getEnddate()
-    {
-        return $this->enddate;
-    }
+    
 
     /**
      * Add answers
      *
      * @param \Nkg\QuizzBundle\Entity\Answer $answers
-     * @return Quizz
+     * @return Question
      */
     public function addAnswer(\Nkg\QuizzBundle\Entity\Answer $answer)
     {
-        $answer->setQuizz($this);
+        $answer->setQuestion($this);
         $this->answers->add($answer);
 
         return $this;
@@ -335,7 +213,7 @@ class Quizz
      * Set propriete1
      *
      * @param string $propriete1
-     * @return Quizz
+     * @return Question
      */
     public function setPropriete1($propriete1)
     {
@@ -358,7 +236,7 @@ class Quizz
      * Set propriete2
      *
      * @param string $propriete2
-     * @return Quizz
+     * @return Question
      */
     public function setPropriete2($propriete2)
     {
@@ -375,5 +253,51 @@ class Quizz
     public function getPropriete2()
     {
         return $this->propriete2;
+    }
+
+    /**
+     * Set hide
+     *
+     * @param boolean $hide
+     * @return Question
+     */
+    public function setHide($hide)
+    {
+        $this->hide = $hide;
+
+        return $this;
+    }
+
+    /**
+     * Get hide
+     *
+     * @return boolean
+     */
+    public function getHide()
+    {
+        return $this->hide;
+    }
+
+    /**
+     * Set quizz
+     *
+     * @param \Nkg\QuizzBundle\Entity\Quizz $quizz
+     * @return Question
+     */
+    public function setQuizz(\Nkg\QuizzBundle\Entity\Quizz $quizz = null)
+    {
+        $this->quizz = $quizz;
+
+        return $this;
+    }
+
+    /**
+     * Get quizz
+     *
+     * @return \Nkg\QuizzBundle\Entity\Quizz 
+     */
+    public function getQuizz()
+    {
+        return $this->quizz;
     }
 }

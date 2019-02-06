@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 use Doctrine\ORM\EntityManager;
 
-use Nkg\QuizzBundle\Entity\Quizz;
+use Nkg\QuizzBundle\Entity\Question;
 use Nkg\QuizzBundle\Entity\QuizzRepository;
 use Nkg\QuizzBundle\Entity\Answer;
 use Nkg\QuizzBundle\Entity\AnswerRepository;
@@ -29,28 +29,18 @@ class QuizzService
   }
 
 
-  //lister tous les quizz
-  /*public function getAllQuizzs()
-  {
-    $quizzez = $this->em
-    ->getRepository('NkgQuizzBundle:Quizz')
-    ->findAll();
-
-    return $quizzez;
-  }*/
-
   //lister les quizz actifs par date
   public function getActiveQuizzes()
   {
-    $quizzez = $this->em
+    $query = $this->em
     ->createQuery('SELECT p
       FROM NkgQuizzBundle:Quizz p
-      WHERE p.active = 1
-      AND CURRENT_TIMESTAMP() BETWEEN p.startdate AND p.enddate
+      WHERE 
+      CURRENT_TIMESTAMP() BETWEEN p.startdate AND p.enddate
       ORDER BY p.enddate DESC');
 
     try {
-        $res = $quizzez->getResult();
+        $res = $query->getResult();
         return $res;
     } catch (\Doctrine\ORM\NoResultException $e) {
         return array();
